@@ -70,12 +70,12 @@ def test_model_handles_missing_values(model, sample_data, get_required_features)
     try:
         # モデルが例外を発生させずに予測できるかテスト
         predictions = model.predict(X)
-        assert isinstance(predictions, np.ndarray), (
-            "予測結果は numpy 配列である必要があります"
-        )
-        assert len(predictions) == len(X), (
-            "予測結果の長さはデータと一致する必要があります"
-        )
+        assert isinstance(
+            predictions, np.ndarray
+        ), "予測結果は numpy 配列である必要があります"
+        assert len(predictions) == len(
+            X
+        ), "予測結果の長さはデータと一致する必要があります"
     except Exception as e:
         pytest.fail(f"欠損値のあるデータに対して予測中にエラーが発生: {str(e)}")
 
@@ -113,9 +113,9 @@ def test_model_handles_outliers(model, sample_data, get_required_features):
     try:
         # モデルが例外を発生させずに予測できるかテスト
         predictions = model.predict(X)
-        assert isinstance(predictions, np.ndarray), (
-            "予測結果は numpy 配列である必要があります"
-        )
+        assert isinstance(
+            predictions, np.ndarray
+        ), "予測結果は numpy 配列である必要があります"
     except Exception as e:
         pytest.fail(f"異常値のあるデータに対して予測中にエラーが発生: {str(e)}")
 
@@ -153,9 +153,9 @@ def test_model_handles_categorical_anomalies(model, sample_data, get_required_fe
     try:
         # モデルが例外を発生させずに予測できるかテスト
         predictions = model.predict(X)
-        assert isinstance(predictions, np.ndarray), (
-            "予測結果は numpy 配列である必要があります"
-        )
+        assert isinstance(
+            predictions, np.ndarray
+        ), "予測結果は numpy 配列である必要があります"
     except Exception as e:
         pytest.fail(f"カテゴリ異常のあるデータに対して予測中にエラーが発生: {str(e)}")
 
@@ -228,9 +228,9 @@ def test_model_prediction_distribution(model, sample_data, get_required_features
 
     # 予測が極端に偏っていないことを確認（99%以上が同じクラス予測でないこと）
     max_class_ratio = np.max(counts) / len(predictions)
-    assert max_class_ratio < 0.99, (
-        f"予測が単一クラスに極端に偏っています ({max_class_ratio:.2%})"
-    )
+    assert (
+        max_class_ratio < 0.99
+    ), f"予測が単一クラスに極端に偏っています ({max_class_ratio:.2%})"
 
 
 def test_model_batch_consistency(model, sample_data, get_required_features):
@@ -268,9 +268,9 @@ def test_model_batch_consistency(model, sample_data, get_required_features):
         batched_predictions.extend(batch_pred)
 
     # 全データでの予測と、バッチ処理した予測が一致することを確認
-    assert np.array_equal(full_predictions, batched_predictions), (
-        "バッチサイズによって予測結果が変わっています"
-    )
+    assert np.array_equal(
+        full_predictions, batched_predictions
+    ), "バッチサイズによって予測結果が変わっています"
 
 
 def test_model_fairness_across_groups(model, sample_data, get_required_features):
@@ -315,9 +315,9 @@ def test_model_fairness_across_groups(model, sample_data, get_required_features)
 
     # 差が0.2（20%ポイント）を超えていないことを確認
     for sex, diff in differences.items():
-        assert diff < 0.2, (
-            f"{sex}グループでの予測と実際の生存率の差が大きすぎます: {diff:.2f}"
-        )
+        assert (
+            diff < 0.2
+        ), f"{sex}グループでの予測と実際の生存率の差が大きすぎます: {diff:.2f}"
 
     # 両グループ間での予測率の差が実際の差と大きく乖離していないことを確認
     actual_disparity = abs(sex_survival.max() - sex_survival.min())
@@ -326,9 +326,9 @@ def test_model_fairness_across_groups(model, sample_data, get_required_features)
     )
 
     disparity_diff = abs(actual_disparity - predicted_disparity)
-    assert disparity_diff < 0.15, (
-        f"グループ間の予測格差が実際と大きく異なります: {disparity_diff:.2f}"
-    )
+    assert (
+        disparity_diff < 0.15
+    ), f"グループ間の予測格差が実際と大きく異なります: {disparity_diff:.2f}"
 
 
 def test_model_performance_under_stress(model, sample_data, get_required_features):
@@ -367,6 +367,6 @@ def test_model_performance_under_stress(model, sample_data, get_required_feature
 
     # 1万件あたり5秒以内に処理できることを確認
     time_per_10k = prediction_time / len(large_X) * 10000
-    assert time_per_10k < 5.0, (
-        f"予測速度が遅すぎます: 10,000件あたり{time_per_10k:.2f}秒"
-    )
+    assert (
+        time_per_10k < 5.0
+    ), f"予測速度が遅すぎます: 10,000件あたり{time_per_10k:.2f}秒"
